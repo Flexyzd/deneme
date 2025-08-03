@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Geçen Gün Sayısı</title>
   <style>
     body {
@@ -45,6 +45,7 @@
       border-radius: 20px;
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
     }
     .memory img {
       width: 100%;
@@ -123,7 +124,46 @@
       background-color: #e0559e;
     }
     iframe#musicPlayer {
-      display: none; /* görünmez olacak ama ses kontrol edilebilir */
+      display: none;
+    }
+
+    /* 🖼️ Önizleme kutusu */
+    .preview-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.85);
+      z-index: 99999;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      cursor: zoom-out;
+    }
+    .preview-modal img {
+      max-width: 90%;
+      max-height: 80vh;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+    }
+    .preview-text {
+      position: absolute;
+      bottom: 40px;
+      left: 40px;
+      color: white;
+      text-align: left;
+      max-width: 80%;
+    }
+    .preview-text h3 {
+      margin: 0;
+      font-size: 18px;
+      opacity: 0.8;
+    }
+    .preview-text p {
+      margin: 5px 0 0 0;
+      font-size: 22px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -133,7 +173,8 @@
     <div class="days" id="dayCount">0 gün</div>
   </div>
 
-  <div class="memory">
+  <!-- 📷 Hafıza alanı (önizleme ile birlikte) -->
+  <div class="memory" onclick="openPreview('IMG_8615.jpeg', '2 Eylül 2024', 'İlk Yaz Tatilimizi Hatırlıyormusun Bebeğim🤎')">
     <img src="IMG_8615.jpeg" alt="İlk tatilimiz">
     <div class="text">
       <h3>2 Eylül 2024</h3>
@@ -141,11 +182,20 @@
     </div>
   </div>
 
-  <!-- 🎵 Müzik kontrol alanı -->
+  <!-- 🎵 Müzik kontrol -->
   <div class="music-control">
     <button onclick="toggleMusic()" id="musicBtn">Müziği Başlat</button>
   </div>
   <iframe id="musicPlayer" width="0" height="0" src="https://www.youtube.com/embed/B2jIK0vlDKE?enablejsapi=1" frameborder="0" allow="autoplay"></iframe>
+
+  <!-- 🖼️ Önizleme kutusu -->
+  <div id="previewModal" class="preview-modal" onclick="closePreview()">
+    <img id="previewImage" src="" alt="Preview">
+    <div class="preview-text">
+      <h3 id="previewDate"></h3>
+      <p id="previewCaption"></p>
+    </div>
+  </div>
 
   <script>
     // Gün sayacı
@@ -173,7 +223,6 @@
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('musicPlayer');
     }
-
     let isPlaying = false;
     function toggleMusic() {
       if (player && isPlaying) {
@@ -186,11 +235,20 @@
         isPlaying = true;
       }
     }
-
-    // YouTube Player API yükle
     const tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     document.body.appendChild(tag);
+
+    // 🖼️ Önizleme fonksiyonu
+    function openPreview(src, date, caption) {
+      document.getElementById('previewImage').src = src;
+      document.getElementById('previewDate').textContent = date;
+      document.getElementById('previewCaption').textContent = caption;
+      document.getElementById('previewModal').style.display = 'flex';
+    }
+    function closePreview() {
+      document.getElementById('previewModal').style.display = 'none';
+    }
   </script>
 </body>
 </html>
