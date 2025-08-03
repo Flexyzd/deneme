@@ -9,7 +9,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to bottom right, #ffc0cb, #ffe6eb); /* pembe degrade */
+      background: linear-gradient(to bottom right, #ffc0cb, #ffe6eb);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -71,17 +71,8 @@
       font-size: 18px;
       font-weight: bold;
     }
-    iframe.music {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
-      pointer-events: none;
-    }
 
-    /* 💖 Kalp animasyonu stilleri */
+    /* Kalp animasyonu */
     .heart {
       width: 20px;
       height: 20px;
@@ -91,33 +82,16 @@
       transform: translateX(-50%);
       background-color: #ff69b4;
       clip-path: polygon(
-        50% 0%, 
-        61% 10%, 
-        72% 21%, 
-        83% 32%, 
-        94% 43%, 
-        100% 55%, 
-        94% 67%, 
-        83% 78%, 
-        72% 89%, 
-        61% 100%, 
-        50% 90%, 
-        39% 100%, 
-        28% 89%, 
-        17% 78%, 
-        6% 67%, 
-        0% 55%, 
-        6% 43%, 
-        17% 32%, 
-        28% 21%, 
-        39% 10%
+        50% 0%, 61% 10%, 72% 21%, 83% 32%, 94% 43%, 100% 55%,
+        94% 67%, 83% 78%, 72% 89%, 61% 100%, 50% 90%, 39% 100%,
+        28% 89%, 17% 78%, 6% 67%, 0% 55%, 6% 43%, 17% 32%,
+        28% 21%, 39% 10%
       );
       animation: floatHeart 5s linear forwards;
       opacity: 0.8;
       z-index: 9999;
       pointer-events: none;
     }
-
     @keyframes floatHeart {
       0% {
         transform: translateX(-50%) translateY(0) scale(1);
@@ -128,6 +102,29 @@
         opacity: 0;
       }
     }
+
+    /* 🎵 Müzik kontrol butonu */
+    .music-control {
+      margin: 20px;
+      text-align: center;
+    }
+    .music-control button {
+      background-color: #ff69b4;
+      border: none;
+      color: white;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: background-color 0.3s;
+    }
+    .music-control button:hover {
+      background-color: #e0559e;
+    }
+    iframe#musicPlayer {
+      display: none; /* görünmez olacak ama ses kontrol edilebilir */
+    }
   </style>
 </head>
 <body>
@@ -136,7 +133,6 @@
     <div class="days" id="dayCount">0 gün</div>
   </div>
 
-  <!-- 🖼️ Anı eklemek için aşağıyı çoğaltabilirsin -->
   <div class="memory">
     <img src="ani1.jpg" alt="Yaz tatili">
     <div class="text">
@@ -145,8 +141,11 @@
     </div>
   </div>
 
-  <!-- 🎵 Arka planda müzik çalıyor (YouTube embed) -->
-  <iframe class="music" src="https://www.youtube.com/embed/B2jIK0vlDKE?autoplay=1&loop=1&playlist=B2jIK0vlDKE" frameborder="0" allow="autoplay"></iframe>
+  <!-- 🎵 Müzik kontrol alanı -->
+  <div class="music-control">
+    <button onclick="toggleMusic()" id="musicBtn">Müziği Başlat</button>
+  </div>
+  <iframe id="musicPlayer" width="0" height="0" src="https://www.youtube.com/embed/B2jIK0vlDKE?enablejsapi=1" frameborder="0" allow="autoplay"></iframe>
 
   <script>
     // Gün sayacı
@@ -159,19 +158,39 @@
     }
     updateDayCount();
 
-    // 💖 Kalp animasyonu
+    // Kalpler
     function createHeart() {
       const heart = document.createElement('div');
       heart.classList.add('heart');
-      heart.style.left = Math.random() * 100 + 'vw'; // Rastgele yatay konum
+      heart.style.left = Math.random() * 100 + 'vw';
       document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 5000);
+    }
+    setInterval(createHeart, 300);
 
-      setTimeout(() => {
-        heart.remove();
-      }, 5000);
+    // 🎵 Müzik kontrol (YouTube API ile)
+    let player;
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('musicPlayer');
     }
 
-    setInterval(createHeart, 300); // Her 300ms'de bir kalp
+    let isPlaying = false;
+    function toggleMusic() {
+      if (player && isPlaying) {
+        player.pauseVideo();
+        document.getElementById('musicBtn').textContent = 'Müziği Başlat';
+        isPlaying = false;
+      } else if (player) {
+        player.playVideo();
+        document.getElementById('musicBtn').textContent = 'Müziği Durdur';
+        isPlaying = true;
+      }
+    }
+
+    // YouTube Player API yükle
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.body.appendChild(tag);
   </script>
 </body>
 </html>
