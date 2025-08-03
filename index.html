@@ -8,9 +8,8 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
-      background: url('background.jpg') no-repeat center center fixed;
-      background-size: cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #ffc0cb, #ffe6eb); /* pembe degrade */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -19,22 +18,24 @@
       overflow: auto;
     }
     .counter-box {
-      background-color: rgba(255, 255, 255, 0.15);
+      background-color: rgba(255, 255, 255, 0.25);
       border-radius: 20px;
       padding: 40px 60px;
       text-align: center;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      color: white;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 6px 18px rgba(255, 105, 180, 0.3);
+      color: #b4004e;
       margin-top: 20px;
     }
     .counter-box h2 {
-      font-size: 24px;
-      margin-bottom: 10px;
+      font-size: 28px;
+      margin-bottom: 12px;
+      color: #ff69b4;
     }
     .counter-box .days {
-      font-size: 48px;
+      font-size: 54px;
       font-weight: bold;
+      color: #c2185b;
     }
     .memory {
       position: relative;
@@ -55,7 +56,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+      background: linear-gradient(to top, rgba(255, 105, 180, 0.6), transparent);
       color: white;
       padding: 20px;
       box-sizing: border-box;
@@ -63,7 +64,7 @@
     .memory .text h3 {
       margin: 0 0 5px 0;
       font-size: 16px;
-      opacity: 0.8;
+      opacity: 0.9;
     }
     .memory .text p {
       margin: 0;
@@ -78,6 +79,54 @@
       height: 1px;
       opacity: 0;
       pointer-events: none;
+    }
+
+    /* 💖 Kalp animasyonu stilleri */
+    .heart {
+      width: 20px;
+      height: 20px;
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #ff69b4;
+      clip-path: polygon(
+        50% 0%, 
+        61% 10%, 
+        72% 21%, 
+        83% 32%, 
+        94% 43%, 
+        100% 55%, 
+        94% 67%, 
+        83% 78%, 
+        72% 89%, 
+        61% 100%, 
+        50% 90%, 
+        39% 100%, 
+        28% 89%, 
+        17% 78%, 
+        6% 67%, 
+        0% 55%, 
+        6% 43%, 
+        17% 32%, 
+        28% 21%, 
+        39% 10%
+      );
+      animation: floatHeart 5s linear forwards;
+      opacity: 0.8;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    @keyframes floatHeart {
+      0% {
+        transform: translateX(-50%) translateY(0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(-50%) translateY(-100vh) scale(1.5);
+        opacity: 0;
+      }
     }
   </style>
 </head>
@@ -100,6 +149,7 @@
   <iframe class="music" src="https://www.youtube.com/embed/B2jIK0vlDKE?autoplay=1&loop=1&playlist=B2jIK0vlDKE" frameborder="0" allow="autoplay"></iframe>
 
   <script>
+    // Gün sayacı
     const startDate = new Date('2021-11-11');
     function updateDayCount() {
       const today = new Date();
@@ -108,6 +158,20 @@
       document.getElementById('dayCount').textContent = `${diffDays} gün`;
     }
     updateDayCount();
+
+    // 💖 Kalp animasyonu
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + 'vw'; // Rastgele yatay konum
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 5000);
+    }
+
+    setInterval(createHeart, 300); // Her 300ms'de bir kalp
   </script>
 </body>
 </html>
