@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geçen Gün Sayısı</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      overflow: auto;
+    }
+    .counter-box {
+      background-color: rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 40px 60px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      color: white;
+      margin-top: 20px;
+    }
+    .counter-box h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    .counter-box .days {
+      font-size: 48px;
+      font-weight: bold;
+    }
+    .memory {
+      position: relative;
+      width: 90%;
+      max-width: 600px;
+      margin: 20px auto;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .memory img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .memory .text {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+      color: white;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .memory .text h3 {
+      margin: 0 0 5px 0;
+      font-size: 16px;
+      opacity: 0.8;
+    }
+    .memory .text p {
+      margin: 0;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    iframe.music {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="counter-box">
+    <h2>Geçen gün sayımız</h2>
+    <div class="days" id="dayCount">0 gün</div>
+  </div>
+
+  <!-- 🖼️ Anı eklemek için aşağıyı çoğaltabilirsin -->
+  <div class="memory">
+    <img src="ani1.jpg" alt="Yaz tatili">
+    <div class="text">
+      <h3>20 Haziran 2023</h3>
+      <p>Yaz tatilimiz. Seninle geçirdiğim her an bir rüya gibi.</p>
+    </div>
+  </div>
+
+  <!-- 🎵 Arka planda müzik çalıyor (YouTube embed) -->
+  <iframe class="music" src="https://www.youtube.com/embed/B2jIK0vlDKE?autoplay=1&loop=1&playlist=B2jIK0vlDKE" frameborder="0" allow="autoplay"></iframe>
+
+  <script>
+    const startDate = new Date('2021-11-11');
+    function updateDayCount() {
+      const today = new Date();
+      const diffTime = today - startDate;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      document.getElementById('dayCount').textContent = `${diffDays} gün`;
+    }
+    updateDayCount();
+  </script>
+</body>
+</html>
