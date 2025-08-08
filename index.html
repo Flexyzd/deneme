@@ -2,28 +2,33 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
+  <!-- Ekran boyutuna göre responsive görünmesi için -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Geçen Gün Sayısı</title>
+
   <style>
+    /* ---- GENEL SAYFA TASARIMI ---- */
     body {
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to bottom right, #ffc0cb, #ffe6eb);
+      background: linear-gradient(to bottom right, #ffc0cb, #ffe6eb); /* Pembe tonlarda degrade arka plan */
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
       height: 100vh;
-      overflow: auto;
+      overflow: auto; /* İçerik taşarsa kaydırma yapabilsin */
     }
+
+    /* ---- GÜN SAYACI KUTUSU ---- */
     .counter-box {
-      background-color: rgba(255, 255, 255, 0.25);
+      background-color: rgba(255, 255, 255, 0.25); /* Şeffaf beyaz arka plan */
       border-radius: 20px;
       padding: 40px 60px;
       text-align: center;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 6px 18px rgba(255, 105, 180, 0.3);
+      backdrop-filter: blur(12px); /* Cam efekti */
+      box-shadow: 0 6px 18px rgba(255, 105, 180, 0.3); /* Hafif gölge */
       color: #b4004e;
       margin-top: 20px;
     }
@@ -37,6 +42,8 @@
       font-weight: bold;
       color: #c2185b;
     }
+
+    /* ---- FOTOĞRAF KUTUSU ---- */
     .memory {
       position: relative;
       width: 90%;
@@ -73,7 +80,7 @@
       font-weight: bold;
     }
 
-    /* Kalp animasyonu */
+    /* ---- KALP ANİMASYONU ---- */
     .heart {
       width: 20px;
       height: 20px;
@@ -104,7 +111,7 @@
       }
     }
 
-    /* 🎵 Müzik kontrol butonu */
+    /* ---- MÜZİK BUTONU ---- */
     .music-control {
       margin: 20px;
       text-align: center;
@@ -124,10 +131,10 @@
       background-color: #e0559e;
     }
     iframe#musicPlayer {
-      display: none;
+      display: none; /* YouTube iframe gizleniyor */
     }
 
-    /* 🖼️ Önizleme kutusu */
+    /* ---- FOTOĞRAF ÖNİZLEME MODALI ---- */
     .preview-modal {
       display: none;
       position: fixed;
@@ -165,30 +172,64 @@
       font-size: 22px;
       font-weight: bold;
     }
+
+    /* ---- TELEFON OPTİMİZASYONU ---- */
+    @media (max-width: 480px) {
+      .preview-text {
+        bottom: 20px;
+        left: 10px;
+        font-size: 14px;
+        padding: 8px;
+        max-width: 90%;
+      }
+      .preview-text h3 {
+        font-size: 13px;
+      }
+      .preview-text p {
+        font-size: 15px;
+      }
+    }
   </style>
 </head>
 <body>
+
+  <!-- Gün sayacı -->
   <div class="counter-box">
-    <h2>Seninle İlk Günden Bu Yana Geçeirdiğimiz Süre</h2>
+    <h2>Seninle İlk Günden Bu Yana Geçirdiğimiz Süre</h2>
     <div class="days" id="dayCount">0 gün</div>
   </div>
 
-  <!-- 📷 Hafıza alanı (önizleme ile birlikte) -->
+  <!-- Fotoğraf ve açıklaması -->
+  <div class="memory" onclick="openPreview('IMG_8615.jpeg', '2 Eylül 2024', 'İlk Yaz Tatilimizi Hatırlıyormusun Bebeğim🤎')">
+    <img src="IMG_3466.jpeg" alt="İlk tatilimiz">
+    <div class="text">
+      <h3>16 Mart 2024</h3>
+      <p>Bugünden Sonra Heşey Çok Değişti Ve Bir Birimizi Çok İyi Tanımaya Başladık 😏 </p>
+    </div>
+    
+  </div>
   <div class="memory" onclick="openPreview('IMG_8615.jpeg', '2 Eylül 2024', 'İlk Yaz Tatilimizi Hatırlıyormusun Bebeğim🤎')">
     <img src="IMG_8615.jpeg" alt="İlk tatilimiz">
     <div class="text">
       <h3>2 Eylül 2024</h3>
-      <p>İlk Yaz Tatilimizi Hatırlıyormusun Bebeğim🤎</p>
+      <p>İlk Yaz Tatilimizi Hatırlıyormusun Bebeğim 🤎</p>
     </div>
   </div>
 
-  <!-- 🎵 Müzik kontrol -->
+  <!-- Müzik kontrol butonu -->
   <div class="music-control">
-    <button onclick="toggleMusic()" id="musicBtn">Müziği Başlat</button>
+    <button onclick="toggleMusic()" id="musicBtn">Durdur</button>
   </div>
-  <iframe id="musicPlayer" width="0" height="0" src="https://www.youtube.com/embed/B2jIK0vlDKE?enablejsapi=1" frameborder="0" allow="autoplay"></iframe>
 
-  <!-- 🖼️ Önizleme kutusu -->
+  <!-- Arka planda çalacak YouTube müzik -->
+  <iframe id="musicPlayer"
+    width="0"
+    height="0"
+    src="https://www.youtube.com/embed/fExyfJlgkb4?enablejsapi=1&start=48&autoplay=1"
+    frameborder="0"
+    allow="autoplay"></iframe>
+
+  <!-- Fotoğraf önizleme modalı -->
   <div id="previewModal" class="preview-modal" onclick="closePreview()">
     <img id="previewImage" src="" alt="Preview">
     <div class="preview-text">
@@ -198,7 +239,7 @@
   </div>
 
   <script>
-    // Gün sayacı
+    /* ---- GÜN SAYACINI HESAPLAMA ---- */
     const startDate = new Date('2021-11-11');
     function updateDayCount() {
       const today = new Date();
@@ -208,38 +249,47 @@
     }
     updateDayCount();
 
-    // Kalpler
+    /* ---- KALP ANİMASYONU OLUŞTURMA ---- */
     function createHeart() {
       const heart = document.createElement('div');
       heart.classList.add('heart');
-      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.left = Math.random() * 100 + 'vw'; // Rastgele yatay konum
       document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 5000);
+      setTimeout(() => heart.remove(), 5000); // 5 sn sonra sil
     }
-    setInterval(createHeart, 300);
+    setInterval(createHeart, 300); // Her 0.3 saniyede bir kalp ekle
 
-    // 🎵 Müzik kontrol (YouTube API ile)
+    /* ---- MÜZİK KONTROL ---- */
     let player;
     function onYouTubeIframeAPIReady() {
-      player = new YT.Player('musicPlayer');
+      player = new YT.Player('musicPlayer', {
+        events: {
+          'onReady': (event) => {
+            event.target.seekTo(48); // 48. saniyeden başlat
+            event.target.playVideo();
+            isPlaying = true;
+          }
+        }
+      });
     }
     let isPlaying = false;
     function toggleMusic() {
       if (player && isPlaying) {
         player.pauseVideo();
-        document.getElementById('musicBtn').textContent = 'Müziği Başlat';
+        document.getElementById('musicBtn').textContent = 'Başlat';
         isPlaying = false;
       } else if (player) {
         player.playVideo();
-        document.getElementById('musicBtn').textContent = 'Müziği Durdur';
+        document.getElementById('musicBtn').textContent = 'Durdur';
         isPlaying = true;
       }
     }
+    // YouTube API yükleme
     const tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     document.body.appendChild(tag);
 
-    // 🖼️ Önizleme fonksiyonu
+    /* ---- FOTOĞRAF ÖNİZLEME ---- */
     function openPreview(src, date, caption) {
       document.getElementById('previewImage').src = src;
       document.getElementById('previewDate').textContent = date;
